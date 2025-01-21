@@ -36,6 +36,19 @@ class Tree {
     if (value < root.data) return this.insert(root.left, value);
     if (value > root.data) return this.insert(root.right, value);
   }
+
+  delete(root, value) {
+    // need to set root.right or .left to null
+    // depending on which side the value I'm searching for is on.
+    // right now, root is the value I want to delete, I need the parent.
+    if (value === root.data && !root.left && !root.right) {
+      console.log(root);
+      root = null;
+      return;
+    }
+    if (value < root.data) return this.delete(root.left, value);
+    if (value > root.data) return this.delete(root.right, value);
+  }
 }
 
 function buildTree(array, start = 0, end = array.length - 1) {
@@ -59,4 +72,5 @@ tree.insert(tree.root, 16);
 tree.insert(tree.root, 17);
 tree.insert(tree.root, 10);
 tree.insert(tree.root, -1);
+tree.delete(tree.root, -1);
 prettyPrint(tree.root);
