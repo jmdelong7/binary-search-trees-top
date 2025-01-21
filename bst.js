@@ -24,21 +24,17 @@ class Tree {
     this.root = buildTree(array);
   }
 
-  insert(value) {
-    let root = this.root;
-    const node = new Node(value);
-    if (value === root.data) return 'Value already in tree.';
-    if (value < root.data) {
-      // go left
-      // check root.data
-      // if root.left not null, check less than
-      // if less than and null, place node
-    } else {
-      // go right
-      // check root.data
-      // if root.right not null, check greater than
-      // if greater than and null, place node
+  insert(root, value) {
+    if (value < root.data && root.left === null) {
+      root.left = new Node(value);
+      return;
+    } else if (value > root.data && root.right === null) {
+      root.right = new Node(value);
+      return;
     }
+
+    if (value < root.data) return this.insert(root.left, value);
+    if (value > root.data) return this.insert(root.right, value);
   }
 }
 
@@ -57,4 +53,10 @@ let array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]; // 14
 array = [...new Set(array)].sort((a, b) => a - b); // 11
 // [1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345]
 const tree = new Tree(array);
+tree.insert(tree.root, 44);
+tree.insert(tree.root, 17);
+tree.insert(tree.root, 16);
+tree.insert(tree.root, 17);
+tree.insert(tree.root, 10);
+tree.insert(tree.root, -1);
 prettyPrint(tree.root);
