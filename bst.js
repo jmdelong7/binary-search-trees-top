@@ -41,11 +41,24 @@ class Tree {
     if (root === null) return;
 
     if (root.left !== null) {
-      value === root.left.data ? (root.left = null) : null;
+      if (root.left.data === value) {
+        // if one child
+        if (!root.left.left || !root.left.right) {
+          root.left = !root.left.left ? root.left.right : root.left.left;
+          return;
+        }
+      }
+      value === root.left.data ? (root.left = null) : null; // if leaf
     }
 
     if (root.right !== null) {
-      value === root.right.data ? (root.right = null) : null;
+      if (root.right.data === value) {
+        // if one child
+        if (!root.right.right || !root.right.left) {
+          root.right = !root.right.right ? root.right.left : root.right.right;
+        }
+      }
+      value === root.right.data ? (root.right = null) : null; // if leaf
     }
 
     if (value < root.data) return this.delete(root.left, value);
@@ -74,5 +87,5 @@ tree.insert(tree.root, 16);
 tree.insert(tree.root, 17);
 tree.insert(tree.root, 10);
 tree.insert(tree.root, -1);
-tree.delete(tree.root, 44);
+tree.delete(tree.root, 324);
 prettyPrint(tree.root);
