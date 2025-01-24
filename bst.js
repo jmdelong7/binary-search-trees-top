@@ -19,53 +19,6 @@ class Node {
   }
 }
 
-class Tree {
-  constructor(array) {
-    this.root = buildTree(array);
-  }
-
-  insert(root, value) {
-    if (value < root.data && root.left === null) {
-      root.left = new Node(value);
-      return;
-    } else if (value > root.data && root.right === null) {
-      root.right = new Node(value);
-      return;
-    }
-
-    if (value < root.data) return this.insert(root.left, value);
-    if (value > root.data) return this.insert(root.right, value);
-  }
-
-  delete(root, value) {
-    if (root === null) return;
-
-    if (root.left !== null) {
-      if (root.left.data === value) {
-        // if one child
-        if (!root.left.left || !root.left.right) {
-          root.left = !root.left.left ? root.left.right : root.left.left;
-          return;
-        }
-      }
-      value === root.left.data ? (root.left = null) : null; // if leaf
-    }
-
-    if (root.right !== null) {
-      if (root.right.data === value) {
-        // if one child
-        if (!root.right.right || !root.right.left) {
-          root.right = !root.right.right ? root.right.left : root.right.right;
-        }
-      }
-      value === root.right.data ? (root.right = null) : null; // if leaf
-    }
-
-    if (value < root.data) return this.delete(root.left, value);
-    if (value > root.data) return this.delete(root.right, value);
-  }
-}
-
 function buildTree(array, start = 0, end = array.length - 1) {
   if (start > end) return null;
   const mid = Math.floor((start + end) / 2); // index = 5, value = 8
@@ -77,15 +30,37 @@ function buildTree(array, start = 0, end = array.length - 1) {
   return root;
 }
 
-let array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]; // 14
-array = [...new Set(array)].sort((a, b) => a - b); // 11
-// [1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345]
+class Tree {
+  constructor(array) {
+    array = [...new Set(array)].sort((a, b) => a - b);
+    this.root = buildTree(array);
+  }
+}
+
+function insert(root, value) {
+  if (value < root.data && root.left === null) {
+    root.left = new Node(value);
+    return;
+  } else if (value > root.data && root.right === null) {
+    root.right = new Node(value);
+    return;
+  }
+
+  if (value < root.data) return insert(root.left, value);
+  if (value > root.data) return insert(root.right, value);
+}
+
+function find(root, value) {
+  if (value === root.data) return root;
+  if (root === null) return null;
+  if (value < root.data) return find(root.left, value);
+  if (value > root.data) return find(root.right, value);
+}
+
+let array = [
+  1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 25, 84, 234, 113, 6345, 324, 313, 555,
+]; // 14
 const tree = new Tree(array);
-tree.insert(tree.root, 44);
-tree.insert(tree.root, 17);
-tree.insert(tree.root, 16);
-tree.insert(tree.root, 17);
-tree.insert(tree.root, 10);
-tree.insert(tree.root, -1);
-tree.delete(tree.root, 324);
+insert(tree.root, 444);
 prettyPrint(tree.root);
+console.log(find(tree.root, 234));
