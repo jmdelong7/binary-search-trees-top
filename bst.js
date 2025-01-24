@@ -57,13 +57,26 @@ function find(root, value) {
   if (value > root.data) return find(root.right, value);
 }
 
-function levelOrder(root, callback, arr = []) {
+function levelOrderRec(root, callback, arr = []) {
+  if (callback === undefined) throw Error('callback is required.');
   if (root === null) return;
   const { left, right } = root;
   arr.push(left, right);
   callback(root);
 
-  return levelOrder(arr.shift(), callback, arr);
+  return levelOrderRec(arr.shift(), callback, arr);
+}
+
+function levelOrderItr(root, callback) {
+  if (callback === undefined) throw Error('callback is required.');
+  const queue = [root];
+  while (queue.length !== 0) {
+    const node = queue.shift();
+    const { left, right } = node;
+    left !== null && queue.push(left);
+    right !== null && queue.push(right);
+    callback(node);
+  }
 }
 
 let array = [
@@ -72,4 +85,4 @@ let array = [
 const tree = new Tree(array);
 insert(tree.root, 444);
 prettyPrint(tree.root);
-levelOrder(tree.root, console.log);
+levelOrderItr(tree.root, console.log);
