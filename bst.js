@@ -57,10 +57,19 @@ function find(root, value) {
   if (value > root.data) return find(root.right, value);
 }
 
+function levelOrder(root, callback, arr = []) {
+  if (root === null) return;
+  const { left, right } = root;
+  arr.push(left, right);
+  callback(root);
+
+  return levelOrder(arr.shift(), callback, arr);
+}
+
 let array = [
   1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 25, 84, 234, 113, 6345, 324, 313, 555,
 ]; // 14
 const tree = new Tree(array);
 insert(tree.root, 444);
 prettyPrint(tree.root);
-console.log(find(tree.root, 234));
+levelOrder(tree.root, console.log);
