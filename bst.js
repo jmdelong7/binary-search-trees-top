@@ -141,10 +141,27 @@ function depth(root, node, count = 0) {
   if (node.data > root.data) return depth(root.right, node, count + 1);
 }
 
+function isBalanced(root) {
+  if (!root) return true;
+
+  const left = height(root.left);
+  const right = height(root.right);
+
+  if (Math.abs(left - right > 1)) return false;
+  if (!isBalanced(root.left) || !isBalanced(root.right)) return false;
+
+  return true;
+}
+
 let array = [
   1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 25, 84, 234, 113, 6345, 324, 313, 555,
   444,
 ]; // 14
 const tree = new Tree(array);
+deleteVal(tree.root, 5);
+deleteVal(tree.root, 7);
+deleteVal(tree.root, 3);
+deleteVal(tree.root, 4);
+
 prettyPrint(tree.root);
-console.log(depth(tree.root, tree.root.right.right.right));
+console.log(isBalanced(tree.root));
