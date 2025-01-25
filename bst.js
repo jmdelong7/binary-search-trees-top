@@ -134,10 +134,11 @@ function height(node) {
   return Math.max(height(node.left), height(node.right)) + 1;
 }
 
-function depth(root, node) {
-  if (!root || !node) return -1;
-  if (node.data < root.data) return depth(root.left, node);
-  if (node.data > root.data) return depth(root.right, node);
+function depth(root, node, count = 0) {
+  if (root === node) return count;
+  if (!root) return null;
+  if (node.data < root.data) return depth(root.left, node, count + 1);
+  if (node.data > root.data) return depth(root.right, node, count + 1);
 }
 
 let array = [
@@ -146,4 +147,4 @@ let array = [
 ]; // 14
 const tree = new Tree(array);
 prettyPrint(tree.root);
-postOrder(tree.root, console.log);
+console.log(depth(tree.root, tree.root.right.right.right));
