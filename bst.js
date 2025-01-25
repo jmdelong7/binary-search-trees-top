@@ -51,61 +51,29 @@ function insert(root, value) {
 }
 
 function deleteVal(root, value) {
-  if (!root.left && !root.right) return null;
-
-  const { left, right } = root;
-
-  if (left && left.data === value) {
-    const l = left.left;
-    const r = left.right;
-
-    // Delete left node that has 2 children
-    if (l && r) {
-      let successor = r;
-      while (successor.left) {
-        successor = successor.left;
-      }
-      left.data = successor.data;
-      left.right = deleteVal(r, successor.data);
-      return root;
-    }
-
-    // Delete left node that has 1 child
-    if (l && !r) return (root.left = l);
-    if (!l && r) return (root.left = r);
-
-    // Delete left node that is a leaf node
-    return (root.left = null);
-  }
-
-  if (right && right.data === value) {
-    const l = right.left;
-    const r = right.right;
-
-    // Delete right node that has 2 children
-    if (l && r) {
-      let successor = r;
-      while (successor.left) {
-        successor = successor.left;
-      }
-      right.data = successor.data;
-      right.right = deleteVal(r, successor.data);
-      return root;
-    }
-
-    // Delete right node that has 1 child
-    if (l && !r) return (root.right = l);
-    if (!l && r) return (root.right = r);
-
-    // Delete right node that is a leaf node
-    return (root.right = null);
-  }
+  if (!root) return null; // Base case: if root is null, nothing to delete
 
   if (value < root.data) {
-    return deleteVal(root.left, value);
+    root.left = deleteVal(root.left, value); // Traverse left subtree
   } else if (value > root.data) {
-    return deleteVal(root.right, value);
+    root.right = deleteVal(root.right, value); // Traverse right subtree
+  } else {
+    // Node to delete found
+    if (!root.left) return root.right; // Case: 0 or 1 child (only right or none)
+    if (!root.right) return root.left; // Case: 1 child (only left)
+
+    function findMin(node) {
+      while (node.left) node = node.left; // Traverse to the leftmost node
+      return node; // Return the smallest node
+    }
+
+    // Case: 2 children
+    let successor = findMin(root.right); // Find the in-order successor
+    root.data = successor.data; // Replace value with successor's value
+    root.right = deleteVal(root.right, successor.data); // Remove successor
   }
+
+  return root; // Return the modified root
 }
 
 function find(root, value) {
