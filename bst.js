@@ -94,7 +94,7 @@ function levelOrderRec(root, callback, arr = []) {
 }
 
 function levelOrderItr(root, callback) {
-  if (callback === undefined) throw Error('callback is required.');
+  if (!callback) throw Error('callback is required.');
   const queue = [root];
   while (queue.length !== 0) {
     const node = queue.shift();
@@ -103,6 +103,30 @@ function levelOrderItr(root, callback) {
     right !== null && queue.push(right);
     callback(node);
   }
+}
+
+function preOrder(root, callback) {
+  if (!callback) throw Error('callback is required.');
+  if (!root) return null;
+  callback(root);
+  preOrder(root.left, callback);
+  preOrder(root.right, callback);
+}
+
+function inOrder(root, callback) {
+  if (!callback) throw Error('callback is required.');
+  if (!root) return null;
+  inOrder(root.left, callback);
+  callback(root);
+  inOrder(root.right, callback);
+}
+
+function postOrder(root, callback) {
+  if (!callback) throw Error('callback is required.');
+  if (!root) return null;
+  postOrder(root.left, callback);
+  postOrder(root.right, callback);
+  callback(root);
 }
 
 function height(node) {
@@ -121,9 +145,5 @@ let array = [
   444,
 ]; // 14
 const tree = new Tree(array);
-deleteVal(tree.root, 6345);
-deleteVal(tree.root, 324);
-deleteVal(tree.root, 113);
-deleteVal(tree.root, 5);
-
 prettyPrint(tree.root);
+postOrder(tree.root, console.log);
