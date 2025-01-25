@@ -79,10 +79,16 @@ function levelOrderItr(root, callback) {
   }
 }
 
+function height(node) {
+  if (!node) return -1;
+  return Math.max(height(node.left), height(node.right)) + 1;
+}
+
 let array = [
   1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 25, 84, 234, 113, 6345, 324, 313, 555,
+  444,
 ]; // 14
 const tree = new Tree(array);
-insert(tree.root, 444);
 prettyPrint(tree.root);
-levelOrderItr(tree.root, console.log);
+console.log(tree.root.left.left.left);
+console.log(height(tree.root.left.left.left));
