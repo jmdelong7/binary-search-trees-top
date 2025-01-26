@@ -153,15 +153,30 @@ function isBalanced(root) {
   return true;
 }
 
-let array = [
-  1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 25, 84, 234, 113, 6345, 324, 313, 555,
-  444,
-]; // 14
-const tree = new Tree(array);
-deleteVal(tree.root, 5);
-deleteVal(tree.root, 7);
-deleteVal(tree.root, 3);
-deleteVal(tree.root, 4);
+function rebalance(root) {
+  const values = [];
+  inOrder(root, (node) => values.push(node.data));
+  console.log(values);
+  return new Tree(values);
+}
 
-prettyPrint(tree.root);
-console.log(isBalanced(tree.root));
+function generateArray(nums, min, max) {
+  const arr = [];
+  for (i = 0; i < nums; i++) {
+    const rand = Math.random();
+    const num = Math.floor(rand * (max - min) + 1) + min;
+    arr.push(num);
+  }
+  return arr;
+}
+
+let array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 25, 84, 234, 113];
+const tree = new Tree(array);
+
+let array2 = generateArray(10, 500, 600);
+array2.forEach((num) => insert(tree.root, num));
+
+const tree2 = rebalance(tree.root);
+prettyPrint(tree2.root);
+
+console.log(isBalanced(tree2));
